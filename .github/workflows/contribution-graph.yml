@@ -27,11 +27,11 @@ jobs:
         id: snake
         with:
           github_user_name: ${{ github.repository_owner }}
-          # dots run bg-deep → mint → powder → lav → lav-ink, so the busiest
-          # days land on the same lavender the site uses for accents
+          # a sequential ramp in the accent hue: bg-deep for an empty day,
+          # then lavender darkening to --lav-ink on the busiest
           outputs: |
-            dist/snake-light.svg?color_snake=#1b1a17&color_dots=#eae6dc,#dcebdd,#d9e5f0,#e6dff5,#52468a
-            dist/snake-dark.svg?color_snake=#f2efe8&color_dots=#232019,#2f6440,#2f5578,#52468a,#c9bff0
+            dist/snake-light.svg?color_snake=#1b1a17&color_dots=#eae6dc,#e6dff5,#c3b4e2,#8878bd,#52468a
+            dist/snake-dark.svg?color_snake=#f2efe8&color_dots=#232019,#3a3358,#574b8f,#8c7fc4,#c9bff0
 
       - name: Push to the output branch
         uses: crazy-max/ghaction-github-pages@v4
