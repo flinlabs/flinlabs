@@ -165,7 +165,7 @@ DESCRIPTORS = [
     "building CompLens: address in, comps out",
     "studying econ + data science at Berkeley",
     "optimizing gacha teams for Morimens",
-    "running a 300-member ocean nonprofit",
+    "putting Claude to work on commercial leases",
     "designing my own narrative puzzle videogame",
 ]
 
@@ -271,23 +271,13 @@ CARDS = [
     },
     {
         "file": "card-lease-intelligence",
-        "kind": "paper",
+        "kind": "note",
         "accent": "powder",
         "period": "Jun – Aug 2026",
         "title": "Lease Intelligence",
         "blurb": "Self-serve Q&A over 880 commercial leases, built inside the Empire State Building's landlord.",
         "tag": "AI · Product · Real Estate",
         "tilt": -1.6,
-    },
-    {
-        "file": "card-walsea",
-        "kind": "note",
-        "accent": "mint",
-        "period": "2021 – 2024",
-        "title": "WAL-SEA",
-        "blurb": "A homebuilt multifunctional ROV for near-shore ecosystems, field-tested in Monterey Bay.",
-        "tag": "Engineering · Environmental · Science",
-        "tilt": 1.2,
     },
 ]
 
@@ -357,8 +347,8 @@ STACK = [
     ("TypeScript", "lav"), ("React", "powder"), ("Next.js", "sand"), ("Tailwind", "mint"),
     ("Vite", "butter"), ("Node", "blush"), ("Python", "powder"), ("FastAPI", "mint"),
     ("Claude API", "lav"), ("Postgres", "sand"), ("Supabase", "mint"), ("SQL", "butter"),
-    ("GSAP", "blush"), ("Vercel", "lav"), ("Azure", "powder"), ("Airtable", "sand"),
-    ("Arduino", "butter"), ("Pixhawk", "blush"), ("Raspberry Pi", "mint"), ("SolidWorks", "powder"),
+    ("GSAP", "blush"), ("Zustand", "sand"), ("Vercel", "lav"), ("Azure", "powder"),
+    ("Airtable", "mint"), ("Glide", "butter"), ("Chrome Extensions", "blush"),
 ]
 
 CHIP_H = 30
