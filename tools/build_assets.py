@@ -21,6 +21,7 @@ SITE = "https://flinportfolio.vercel.app"
 W = 880  # GitHub's rendered README column on desktop
 
 EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)"
+EASE_SMOOTH = "cubic-bezier(0.45, 0, 0.55, 1)"
 
 # ————— tokens, lifted from :root in app/globals.css —————
 LIGHT = {
@@ -135,24 +136,29 @@ def motif(x, y, scale=1.0, stroke="currentColor", dot="#52468a", animate=True, s
 # 7.5s is half the rotator's loop, so the two never drift into a syncopated beat.
 MOTIF_CSS = """
     .wave { stroke-dasharray: 100 200; stroke-dashoffset: 110;
-            animation: wave 7.5s %(ease)s infinite; }
+            animation: wave 7.5s linear infinite; }
     .dot  { transform-box: fill-box; transform-origin: center; transform: scale(0);
-            animation: dot 7.5s %(ease)s infinite; }
+            animation: dot 7.5s linear infinite; }
+    /* Each segment carries its own curve. The entry keeps the site's ease-out,
+       which front-loads hard: 75%% of the travel lands in the first 20%% of the
+       window. Arriving that fast reads as intent. Leaving that fast just reads
+       as the image blinking out, so the exit gets a symmetric curve over a
+       longer window and actually sweeps. */
     @keyframes wave {
-      0%%   { stroke-dashoffset: 110; }
-      20%%  { stroke-dashoffset: 0; }
-      72%%  { stroke-dashoffset: 0; }
+      0%%   { stroke-dashoffset: 110; animation-timing-function: %(easeout)s; }
+      18%%  { stroke-dashoffset: 0; }
+      60%%  { stroke-dashoffset: 0; animation-timing-function: %(smooth)s; }
       88%%  { stroke-dashoffset: -110; }
       100%% { stroke-dashoffset: -110; }
     }
-    /* the dot lands on the crest just as the line completes, and lifts off
-       just before the line sweeps away, so it is never left hanging alone */
+    /* the dot lands as the line completes and lifts just before it sweeps away,
+       so it is never left hanging on its own */
     @keyframes dot {
-      0%%, 17%%   { transform: scale(0); }
-      23%%, 66%%  { transform: scale(1); }
-      72%%, 100%% { transform: scale(0); }
+      0%%, 15%%   { transform: scale(0); animation-timing-function: %(easeout)s; }
+      21%%, 54%%  { transform: scale(1); animation-timing-function: %(smooth)s; }
+      62%%, 100%% { transform: scale(0); }
     }
-""" % {"ease": EASE_OUT}
+""" % {"easeout": EASE_OUT, "smooth": EASE_SMOOTH}
 
 REDUCED_MOTION = """
     @media (prefers-reduced-motion: reduce) {
