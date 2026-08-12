@@ -1,10 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="302" viewBox="0 0 880 302" role="img"><style>
-    .wave { stroke-dasharray: 100; stroke-dashoffset: 100;
-            animation: draw 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+    .wave { stroke-dasharray: 100 200; stroke-dashoffset: 110;
+            animation: wave 7.5s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
     .dot  { transform-box: fill-box; transform-origin: center; transform: scale(0);
-            animation: pop 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.15s forwards; }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
-    @keyframes pop  { to { transform: scale(1); } }
+            animation: dot 7.5s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+    @keyframes wave {
+      0%   { stroke-dashoffset: 110; }
+      20%  { stroke-dashoffset: 0; }
+      72%  { stroke-dashoffset: 0; }
+      88%  { stroke-dashoffset: -110; }
+      100% { stroke-dashoffset: -110; }
+    }
+    /* the dot lands on the crest just as the line completes, and lifts off
+       just before the line sweeps away, so it is never left hanging alone */
+    @keyframes dot {
+      0%, 17%   { transform: scale(0); }
+      23%, 66%  { transform: scale(1); }
+      72%, 100% { transform: scale(0); }
+    }
 
     .roll { animation: roll 15s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
     @keyframes roll { 0%,16% { transform: translateY(0px); } 20%,36% { transform: translateY(-22px); } 40%,56% { transform: translateY(-44px); } 60%,76% { transform: translateY(-66px); } 80%,96% { transform: translateY(-88px); } 100% { transform: translateY(-110px); } }

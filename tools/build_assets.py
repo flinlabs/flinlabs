@@ -126,13 +126,32 @@ def motif(x, y, scale=1.0, stroke="currentColor", dot="#52468a", animate=True, s
     )
 
 
+# The mark draws on, holds, then keeps travelling the same way off. Offset
+# 110 -> 0 grows the line from its start and 0 -> -110 retracts that same start
+# past the end, so the exit continues the entry's direction instead of reading
+# as a rewind. The gap runs 200 against a dash of 100 and the offset overshoots
+# by 10: at a boundary the round linecap paints a half-circle, which left a
+# speck at each end of the path when the stroke was meant to be fully gone.
+# 7.5s is half the rotator's loop, so the two never drift into a syncopated beat.
 MOTIF_CSS = """
-    .wave { stroke-dasharray: 100; stroke-dashoffset: 100;
-            animation: draw 1.5s %(ease)s 0.2s forwards; }
+    .wave { stroke-dasharray: 100 200; stroke-dashoffset: 110;
+            animation: wave 7.5s %(ease)s infinite; }
     .dot  { transform-box: fill-box; transform-origin: center; transform: scale(0);
-            animation: pop 0.55s %(ease)s 1.15s forwards; }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
-    @keyframes pop  { to { transform: scale(1); } }
+            animation: dot 7.5s %(ease)s infinite; }
+    @keyframes wave {
+      0%%   { stroke-dashoffset: 110; }
+      20%%  { stroke-dashoffset: 0; }
+      72%%  { stroke-dashoffset: 0; }
+      88%%  { stroke-dashoffset: -110; }
+      100%% { stroke-dashoffset: -110; }
+    }
+    /* the dot lands on the crest just as the line completes, and lifts off
+       just before the line sweeps away, so it is never left hanging alone */
+    @keyframes dot {
+      0%%, 17%%   { transform: scale(0); }
+      23%%, 66%%  { transform: scale(1); }
+      72%%, 100%% { transform: scale(0); }
+    }
 """ % {"ease": EASE_OUT}
 
 REDUCED_MOTION = """
