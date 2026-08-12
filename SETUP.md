@@ -42,7 +42,9 @@ README.md                            the profile itself
 assets/*.svg                         the artwork (generated, don't hand-edit)
 tools/build_assets.py                the generator: layout, copy, palette
 tools/typeset.py                     outlines Archivo / IBM Plex Mono to paths
-.github/workflows/contribution-graph.yml
+tools/fetch_activity.py              pulls the streak / commit numbers
+tools/build_activity.py              renders them
+.github/workflows/activity.yml
 ```
 
 Assets come in two flavours. The header, section rules and footer paint a ground
@@ -60,9 +62,9 @@ way to get real Archivo onto the page.
 ## Shipping it
 
 1. Merge this branch into `main`. The README is live the moment it lands.
-2. Go to **Actions → contribution graph → Run workflow** once. Until it runs,
-   the `output` branch doesn't exist and the snake image in the Activity section
-   is a broken link. After that it redraws itself daily at 04:17 UTC.
+2. Go to **Actions → activity → Run workflow** once. Until it runs, the
+   `output` branch has no `activity-*.svg` and the Activity section is a broken
+   image. After that it recomputes itself daily at 04:17 UTC.
 3. If Actions are disabled on the repo, enable them first under
    **Settings → Actions → General → Allow all actions**.
 
@@ -88,16 +90,21 @@ one brand, and nothing keeps them in sync automatically.
 
 **Camo caches hard.** Push a new version of an asset and GitHub may keep serving
 the old one for hours. The `?v=` query on each URL in `README.md` is the lever.
-It sits at `v=5` now; bump it every time you regenerate and the cache is bypassed.
+It sits at `v=6` now; bump it every time you regenerate and the cache is bypassed.
 
-**The stats cards are somebody else's server.** `github-readme-stats.vercel.app`
-is a shared public instance and it rate-limits. If the two cards in the Activity
-section go blank, that's why. They come back on their own. Deploying your own
-instance from [that project's repo](https://github.com/anuraghazra/github-readme-stats)
-fixes it permanently, and it's a five-minute Vercel deploy.
+**Activity numbers live on the `output` branch, not in `assets/`.** They change
+without anyone editing the repo, so the workflow regenerates and pushes them
+rather than committing them to `main`. That also means their URLs carry no `?v=`
+query: the file itself changes, so camo refetches on its own.
 
-**Private contributions.** The snake and the stats cards only see public
-activity unless you turn on *Include private contributions on my profile* in
+**No contribution calendar here, on purpose.** GitHub already draws one a few
+hundred pixels below the README on the profile page. A second rendering of the
+same year, isometric or snake-eaten or otherwise, is the same information twice.
+Streaks and lifetime totals appear nowhere else on the page, which is why those
+are what the section shows.
+
+**Private contributions.** The numbers only count public activity unless you
+turn on *Include private contributions on my profile* in
 [GitHub settings](https://github.com/settings/profile).
 
 **Pinned repos still matter.** The README sits above your pinned repositories,

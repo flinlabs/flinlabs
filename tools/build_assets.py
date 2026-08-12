@@ -461,7 +461,7 @@ def main():
         for text, index, slug in (
             ("Projects · on the desk", "01", "projects"),
             ("Stack · what I reach for", "02", "stack"),
-            ("Activity · the last year", "03", "activity"),
+            ("Activity · by the numbers", "03", "activity"),
             ("Elsewhere", "04", "elsewhere"),
         ):
             write("rule-%s-%s.svg" % (slug, t), rule(text, index, theme))
