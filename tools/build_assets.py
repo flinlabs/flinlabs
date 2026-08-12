@@ -188,7 +188,7 @@ def write(name, content):
 # ————— header —————
 DESCRIPTORS = [
     "building CompLens: address in, comps out",
-    "studying econ + data science at Berkeley",
+    "studying data science + econ at Berkeley",
     "optimizing gacha teams for Morimens",
     "putting Claude to work on commercial leases",
     "designing my own narrative puzzle videogame",
@@ -196,7 +196,7 @@ DESCRIPTORS = [
 
 FACTS = [
     ("Located", ["Berkeley, California"]),
-    ("Studying", ["BA Economics, BA Data Science", "Expected May 2028"]),
+    ("Studying", ["BA Data Science, BA Economics", "Expected May 2028"]),
 ]
 
 
@@ -280,7 +280,7 @@ CARDS = [
         "accent": "lav",
         "period": "Jul 2026 – Present",
         "title": "CompLens",
-        "blurb": "Address in, rent comp memo out. A two-model Claude pipeline sources asking rents from official leasing sites first.",
+        "blurb": "Address in, ranked rent comp memo out. React and Vite on Supabase, Google Maps, and a two-model Claude pipeline that sources rents from official leasing sites over aggregators.",
         "tag": "AI · Product · Real Estate",
         "tilt": -1.3,
     },
@@ -300,21 +300,41 @@ CARDS = [
         "accent": "powder",
         "period": "Jun – Aug 2026",
         "title": "Lease Intelligence",
-        "blurb": "Self-serve Q&A over 880 commercial leases, built inside the Empire State Building's landlord.",
+        "blurb": "A proof-of-concept RAG system over 880 commercial leases. Cited excerpts on every answer, a critical-dates dashboard, and Harvey agents producing the abstracts underneath.",
         "tag": "AI · Product · Real Estate",
         "tilt": -1.6,
     },
 ]
 
-CARD_W, CARD_H = 428, 250
-BOX_X, BOX_Y, BOX_W, BOX_H = 18, 16, 392, 214
+CARD_W = 428
+BOX_X, BOX_Y, BOX_W = 18, 16, 392
 FOLD = 22
+PAD = 26
+LINE = 19
+
+
+def blurb_lines(spec):
+    return wrap(spec["blurb"], BOX_W - PAD * 2, family="archivo", weight=400, size=13.5)
+
+
+def _needed_height(spec):
+    """Where the tag row lands once the blurb has all the room it needs."""
+    y = PAD + 22 if spec["kind"] == "paper" else PAD + 4
+    last = y + 40 + 26 + (len(blurb_lines(spec)) - 1) * LINE
+    return last + 40 + PAD
+
+
+# every card takes the tallest card's height, so the grid stays even. Sizing to
+# content rather than clipping at three lines means a longer blurb grows the
+# card instead of losing its last line with no warning.
+BOX_H = max(_needed_height(c) for c in CARDS)
+CARD_H = BOX_H + 36
 
 
 def card(spec):
     wash, wash_ink = PASTELS[spec["accent"]]
     fill = wash if spec["kind"] == "note" else PAPER
-    pad = 26
+    pad = PAD
     o = [shadow("cs", 16, 14)]
 
     body = []
@@ -329,16 +349,16 @@ def card(spec):
         body.append('<rect width="%d" height="%d" fill="%s"/>' % (BOX_W, BOX_H, fill))
         body.append('<rect x="%d" y="%d" width="22" height="2.5" fill="%s"/>' % (pad, pad - 4, wash_ink))
 
-    y = pad + 22 if spec["kind"] == "paper" else pad + 4
+    y = PAD + 22 if spec["kind"] == "paper" else PAD + 4
     body.append(label(spec["period"], pad, y, "rgba(27,26,23,0.48)", 10.5, 0.1)[0])
 
     ty = y + 40
     body.append(txt(spec["title"], pad, ty, "archivo", 640, 25, -0.022, CARD_INK)[0])
 
     by = ty + 26
-    for line in wrap(spec["blurb"], BOX_W - pad * 2, family="archivo", weight=400, size=13.5)[:3]:
+    for line in blurb_lines(spec):
         body.append(txt(line, pad, by, "archivo", 400, 13.5, 0, CARD_INK_SOFT)[0])
-        by += 19
+        by += LINE
 
     fy = BOX_H - pad
     body.append(label(spec["tag"], pad, fy, wash_ink, 10, 0.08)[0])
@@ -374,6 +394,7 @@ STACK = [
     ("Claude API", "lav"), ("Postgres", "sand"), ("Supabase", "mint"), ("SQL", "butter"),
     ("GSAP", "blush"), ("Zustand", "sand"), ("Vercel", "lav"), ("Azure", "powder"),
     ("Airtable", "mint"), ("Glide", "butter"), ("Chrome Extensions", "blush"),
+    ("Harvey", "lav"), ("Yardi", "sand"),
 ]
 
 CHIP_H = 30
@@ -394,6 +415,17 @@ def stack():
         row.append((name, accent, x, cw, tw))
         x += cw + CHIP_GAP
     rows.append(row)
+
+    # a single chip stranded on the last row reads as a mistake, so pull one
+    # down from the row above and re-flow both
+    if len(rows) > 1 and len(rows[-1]) == 1:
+        rows[-2], moved = rows[-2][:-1], rows[-2][-1]
+        rows[-1] = [moved] + rows[-1]
+        for r in (rows[-2], rows[-1]):
+            x = 0
+            for i, (name, accent, _, cw, tw) in enumerate(r):
+                r[i] = (name, accent, x, cw, tw)
+                x += cw + CHIP_GAP
 
     o = []
     for r, items in enumerate(rows):
