@@ -88,7 +88,7 @@ one brand, and nothing keeps them in sync automatically.
 
 **Camo caches hard.** Push a new version of an asset and GitHub may keep serving
 the old one for hours. The `?v=` query on each URL in `README.md` is the lever.
-It sits at `v=4` now; bump it every time you regenerate and the cache is bypassed.
+It sits at `v=5` now; bump it every time you regenerate and the cache is bypassed.
 
 **The stats cards are somebody else's server.** `github-readme-stats.vercel.app`
 is a shared public instance and it rate-limits. If the two cards in the Activity
