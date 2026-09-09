@@ -11,8 +11,6 @@ This past summer at Empire State Realty Trust I built Lease Intelligence, a proo
 
 Before that, the React frontend and STT/LLM/TTS architecture for a real-time voice agent at Skyline (Berkeley SkyDeck), and an MVP candidate insights platform at CGP in Shanghai. Right now I'm building [CompLens](https://complens-ai.vercel.app/), which turns a property address into a ranked rent comp memo for nearby multifamily communities.
 
-Most of it starts as a spreadsheet someone is tired of maintaining.
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/flinlabs/flinlabs/main/assets/rule-projects-dark.svg?v=6">
   <img width="100%" alt="Projects · on the desk" src="https://raw.githubusercontent.com/flinlabs/flinlabs/main/assets/rule-projects-light.svg?v=6">
